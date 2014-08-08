@@ -1,0 +1,164 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <link href="Content/bootstrap.css" rel="stylesheet" />
+    <link href="Content/font-awesome.css" rel="stylesheet" />
+    <link href="Content/style.css" rel="stylesheet" />
+    <title>Quiz</title>
+</head>
+<body>
+    <input type="hidden" id="hidden-input" />
+
+       
+    <div id="question-area" class="well-lg">
+        <div class="container">
+            <div class="row clearfix container">
+                <div class="col-md-3 column">
+                </div>
+                <div class="col-md-2 column">
+                    <button type="button" class="btn btn-primary" onclick="quizApp.beginQuiz();">Start Quiz</button>
+                </div>
+                <div class="col-md-2 column">
+                    <button type="button" class="btn btn-warning" onclick="quizApp.editQuiz();">Edit Quiz</button>
+                </div>
+                <div class="col-md-2 column">
+                    <button type="button" class="btn btn-danger">Quit</button>
+                </div>
+                <div class="col-md-3 column">
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Modal # 1 -->
+    <div class="modal fade" id="quizModal" tabindex="-1" role="dialog" aria-labelledby="quizModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel">Quiz Question Adder</h4>
+                </div>
+                <div class="modal-body">
+
+                    <!--Which type of question-->
+                    <div id="question-type" style="display:none">
+                        <button class="btn btn-success" onclick="quizApp.showMultipleChoice();">Multple Choice</button>
+                        <button class="btn btn-success" onclick="quizApp.showFillInTheBlank();">Fill In The Blank</button>
+                        <button class="btn btn-success" onclick="quizApp.showSelectMoreThanOne();">Select More Than One</button>
+                        <button class="btn btn-success" onclick="quizApp.showDragAndDrop();">Drag And Drop</button>
+                    </div>
+                    <!--End which type of question-->
+
+                    <!--Multple choice creator-->
+                    <div id="multiple-choice1" style="display:none">
+                        <input type="text" id="question-title" placeholder="Enter question here" />
+                        <input type="text" id="question-answer" placeholder="Enter correct answer here" />
+                        <button class="btn btn-success" onclick="quizApp.createMultipleChoice();">Create Question</button>
+                    </div>
+                    <div id="multiple-choice2" style="display:none">
+                        <input type="text" id="possible-answer" placeholder="Enter choice here" />
+                        <button class="btn btn-success" onclick="quizApp.addPossibleAnswer(quizApp.inputReader('possible-answer')); quizApp.inputReader('possible-answer', '');">Add Choice</button>
+                        <!--Display the current question with all answers here-->
+                        <div id="current-question-and-answers" class="well">
+
+                        </div>
+                        <button class="btn btn-primary" onclick="quizApp.editQuiz();">Save Question</button>
+                        <button class="btn btn-danger" onclick="quizApp.deleteCurrentQuestion();">Discard Question</button>
+                    </div>
+
+                    <!--End multple choice creator-->
+
+                    <!--Fill in the blank creator-->
+                    <div id="fill-blank" style="display:none">
+                        <input type="text" id="fill-blank-1" placeholder="Enter part 1 here" />
+                        <input type="text" id="fill-blank-answer" placeholder="Enter answer here" />
+                        <input type="text" id="fill-blank-2" placeholder="Enter part 2 here" />
+                        <div class="well-sm">
+                            <button class="btn btn-success" onclick="quizApp.createFillInTheBlank();">Create Question</button>
+                            <button class="btn btn-danger" onclick="quizApp.editQuiz();">Discard Question</button>
+                        </div>
+                    </div>
+                    <!--End fill in the blank creator-->
+
+                    <!--Select more than one creator-->
+                    <div id="select-more1" style="display:none">
+                        <input type="text" id="select-more-question" placeholder="Enter question here" />
+                        <input type="text" id="select-more-possible-answer" placeholder="Enter answer here" />
+                        <button class="btn btn-success" onclick="quizApp.createSelectMoreThanOne();">Create Question</button>
+                    </div>
+                    <div id="select-more2" style="display:none">
+                        <input type="text" id="select-multiple-possible-answer" placeholder="Enter choice here" />
+                        <div class="checkbox-inline"><label><input type="checkbox" id="select-more-correct-answer" />Correct Answer?</label></div>
+                        <button class="btn btn-success" onclick="quizApp.addPossibleAnswer(quizApp.inputReader('select-multiple-possible-answer')); quizApp.inputReader('select-multiple-possible-answer', ''); document.getElementById('select-more-correct-answer').checked = false;">Add Choice</button>
+
+                        <!--Display the current question with all answers here-->
+                        <div id="current-question-and-answers-multple" class="well">
+
+                        </div>
+                        <button class="btn btn-primary" onclick="quizApp.editQuiz();">Save Question</button>
+                        <button class="btn btn-danger" onclick="quizApp.deleteCurrentQuestion();">Discard Question</button>
+
+                    </div>
+                    <!--End select more than one creator-->
+
+                    <!--Drag and drop creator-->
+                    <div id="drag-and-drop1" style="display:none">
+                        Enter two paired words or phrases:
+                        <input type="text" id="drag-1" placeholder="One" />
+                        <input type="text" id="drag-2" placeholder="Two" />
+                        <button class="btn btn-success" onclick="quizApp.createDragAndDrop();">Create Question</button>
+                    </div>
+
+                    <div id="drag-and-drop2" style="display:none">
+                        Enter two paired words or phrases:
+                        <input type="text" id="drag-group-1" placeholder="One" />
+                        <input type="text" id="drag-group-2" placeholder="Two" />
+                        <div class="well-sm"><button class="btn btn-success" onclick="quizApp.addPossibleAnswer(quizApp.inputReader('drag-group-1'), quizApp.inputReader('drag-group-2'));quizApp.inputReader('drag-group-1', ''); quizApp.inputReader('drag-group-2', '')">Add Choice</button></div>
+
+                        <!--Display the current question with all answers here-->
+                        <div id="current-answers-drag" class="well">
+
+                        </div>
+                        <button class="btn btn-primary" onclick="quizApp.editQuiz();">Save Question</button>
+                        <button class="btn btn-danger" onclick="quizApp.deleteCurrentQuestion();">Discard Question</button>
+
+                    </div>
+                    <!--End drag and drop creator-->
+
+                    <!--<div id="create-question-button" style="display:none">
+                        <button class="btn btn-success">Create Question</button>
+                    </div>-->
+                </div>
+                <div class="modal-footer">
+                    <!--<button type="button" class="btn btn-default" data-dismiss="modal">Exit</button>-->
+                    <!--<button type="button" class="btn btn-primary">Save changes</button>-->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal # 2 -->
+    <div class="modal fade" id="information-modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Detailed Quiz Information</h4>
+                </div>
+                <div class="modal-body" id="detailed-information-modal">
+                    
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+
+    <script src="Scripts/jquery-1.9.1.js"></script>
+    <script src="Scripts/bootstrap.js"></script>
+    <script src="Scripts/jquery-ui-1.10.4.js"></script>
+    <script src="Scripts/script.js"></script>
+</body>
+</html>
